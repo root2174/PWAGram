@@ -196,7 +196,7 @@ self.addEventListener('sync', function (event) {
 								title: dt.title,
 								location: dt.location,
 								image:
-									'"https://firebasestorage.googleapis.com/v0/b/pwagram-ce5fe.appspot.com/o/sf-boat.jpg?alt=media&token=c1896b94-5a3b-4205-8aff-a579f83ac95f"'
+									'https://firebasestorage.googleapis.com/v0/b/pwagram-ce5fe.appspot.com/o/sf-boat.jpg?alt=media&token=c1896b94-5a3b-4205-8aff-a579f83ac95f'
 							})
 						}
 					)
@@ -228,10 +228,45 @@ self.addEventListener('notificationclick', function (event) {
 		notification.close()
 	} else {
 		console.log(action)
-		notification.close()
+		event.waitUntil(
+			clients.matchAll().then((clis) => {
+				var client = clis.find((c) => {
+					return c.visibilityState === 'visible'
+				})
+
+				if (client !== undefined) {
+					client.navigate(notification.data.url)
+					client.focus()
+				} else {
+					clients.openWindow(notification.data.url)
+				}
+				notification.close()
+			})
+		)
 	}
 })
 
 self.addEventListener('notificationclose', function (event) {
 	console.log('Notification was closed', event)
+})
+
+self.addEventListener('push', (event) => {
+	console.log('Push Notification received', event)
+
+	// Fallback push
+	let data = { title: 'NEW!', content: 'Something new happened!', openUrl: '/' }
+	if (event.data) {
+		data = JSON.parse(event.data.text())
+	}
+
+	let options = {
+		body: data.content,
+		icon: '/src/images/icons/app-icon-96x96.png',
+		badge: '/src/images/icons/app-icon-96x96.png',
+		data: {
+			url: data.openUrl
+		}
+	}
+
+	event.waitUntil(self.registration.showNotification(data.title, options))
 })

@@ -57,6 +57,8 @@ function displayConfirmNotification() {
 	}
 }
 
+// Sends the user's subscription to the server, so we can send the notification /// later in the backend.
+// We do this as soon as the the user confirms to the push notification.
 function configurePushSub() {
 	if (!('serviceWorker' in navigator)) {
 		return

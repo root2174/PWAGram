@@ -7,6 +7,11 @@ var sharedMomentsArea = document.querySelector('#shared-moments')
 var form = document.querySelector('form')
 var titleInput = document.querySelector('#title')
 var locationInput = document.querySelector('#location')
+var videoPlayer = document.querySelector('#player')
+var canvas = document.querySelector('#canvas')
+var captureButton = document.querySelector('#capture-btn')
+var imagePicker = document.querySelector('#image-picker')
+var imagePickerArea = document.querySelector('#pick-image')
 
 function openCreatePostModal() {
 	// createPostArea.style.display = 'block';
@@ -136,7 +141,7 @@ function sendData() {
 			title: titleInput.value,
 			location: locationInput.value,
 			image:
-				'"https://firebasestorage.googleapis.com/v0/b/pwagram-ce5fe.appspot.com/o/sf-boat.jpg?alt=media&token=c1896b94-5a3b-4205-8aff-a579f83ac95f"'
+				'https://firebasestorage.googleapis.com/v0/b/pwagram-ce5fe.appspot.com/o/sf-boat.jpg?alt=media&token=c1896b94-5a3b-4205-8aff-a579f83ac95f'
 		})
 	}).then(function (res) {
 		console.log('Sent data', res)
